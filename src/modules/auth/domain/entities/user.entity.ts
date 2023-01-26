@@ -9,7 +9,7 @@ export class User extends Base {
   @Column({ name: 'last_name', type: 'varchar', nullable: true, default: null })
   lastName?: string
 
-  @Column({ name: 'email', type: 'varchar' })
+  @Column({ name: 'email', type: 'varchar', unique: true })
   email: string
 
   @Column({ name: 'password', type: 'varchar' })

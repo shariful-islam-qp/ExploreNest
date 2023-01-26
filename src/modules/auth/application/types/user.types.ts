@@ -1,4 +1,4 @@
-export class CreateUserTypes {
+export class UserTypes {
   data: {
     id: number
     firstName: string

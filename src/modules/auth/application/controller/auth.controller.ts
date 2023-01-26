@@ -1,7 +1,8 @@
-import { Body, Controller, Logger, Post } from '@nestjs/common'
+import { Body, Controller, HttpCode, Logger, Post } from '@nestjs/common'
 import { AuthService } from '../../domain/service/auth.service'
+import { AuthDto } from '../dtos/auth.dto'
 import { CreateUserDto } from '../dtos/create-user.dto'
-import { CreateUserTypes } from '../types/create-user.types'
+import { UserTypes } from '../types/user.types'
 
 @Controller('auth')
 export class AuthController {
@@ -10,16 +11,15 @@ export class AuthController {
 
   // Route to new user signup
   @Post('local/signup')
-  async signUpLocal(
-    @Body() createUserDto: CreateUserDto,
-  ): Promise<CreateUserTypes> {
+  async signUpLocal(@Body() createUserDto: CreateUserDto): Promise<UserTypes> {
     return this.authService.signUpLocal(createUserDto)
   }
 
   // Route to existing user signin
-  @Post('local/signin')
-  async signInLocal() {
-    // return this.authService.signUpLocal()
+  @Post('local/login')
+  @HttpCode(200)
+  async signInLocal(@Body() authDto: AuthDto): Promise<UserTypes> {
+    return this.authService.signInLocal(authDto)
   }
 
   // Route to logout existing user
