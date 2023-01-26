@@ -13,6 +13,7 @@ import { AuthDto } from '../dtos/auth.dto'
 import { CreateUserDto } from '../dtos/create-user.dto'
 import { UserTypes } from '../types/user.types'
 import { Request } from 'express'
+import { AtAuthGuard, RtAuthGuard } from '../../domain/guards'
 
 @Controller('auth')
 export class AuthController {
@@ -34,7 +35,7 @@ export class AuthController {
   }
 
   // Route to logout existing user
-  @UseGuards(AuthGuard('jwt-access'))
+  @UseGuards(AtAuthGuard)
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   async logout(@Req() req: Request) {
@@ -44,7 +45,7 @@ export class AuthController {
   }
 
   // Route to get access token from refresh token
-  @UseGuards(AuthGuard('jwt-refresh'))
+  @UseGuards(RtAuthGuard)
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
   async refreshToken(@Req() req: Request) {

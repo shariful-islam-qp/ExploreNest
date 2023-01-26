@@ -1,11 +1,7 @@
 import { ExtractJwt, Strategy } from 'passport-jwt'
 import { PassportStrategy } from '@nestjs/passport'
 import { Injectable } from '@nestjs/common'
-
-type JWTPayload = {
-  sub: string
-  email: string
-}
+import { JWTPayload } from '../../application/types/jwt.type'
 
 @Injectable()
 export class AtStrategy extends PassportStrategy(Strategy, 'jwt-access') {
