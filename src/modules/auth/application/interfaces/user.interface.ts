@@ -1,4 +1,4 @@
-export class UserTypes {
+export interface UserInterface {
   data: {
     id: number
     firstName: string

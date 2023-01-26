@@ -10,7 +10,7 @@ import { CreateUserDto } from '../../application/dtos/create-user.dto'
 import { User } from '../entities'
 import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt'
-import { UserTypes } from '../../application/types/user.types'
+import { UserInterface } from '../../application/interfaces/user.interface'
 import { AuthDto } from '../../application/dtos/auth.dto'
 
 @Injectable()
@@ -23,7 +23,7 @@ export class AuthService {
   ) {}
 
   // service to signup new user
-  async signUpLocal(createUserDto: CreateUserDto): Promise<UserTypes> {
+  async signUpLocal(createUserDto: CreateUserDto): Promise<UserInterface> {
     // check if the user is already exist or not
     const isUserExist = await this.userRepository.findOneBy({
       email: createUserDto.email,
@@ -65,7 +65,7 @@ export class AuthService {
     }
   }
 
-  async signInLocal(authDto: AuthDto): Promise<UserTypes> {
+  async signInLocal(authDto: AuthDto): Promise<UserInterface> {
     const user = await this.userRepository.findOneBy({ email: authDto.email })
 
     if (!user) throw new ForbiddenException('Access denied')
@@ -92,7 +92,7 @@ export class AuthService {
   }
 
   async logout(userId: number) {
-    const result = await this.userRepository.update(
+    await this.userRepository.update(
       {
         id: userId,
         refreshToken: Not(IsNull()),
