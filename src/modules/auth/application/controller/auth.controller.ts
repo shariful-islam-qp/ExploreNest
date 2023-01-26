@@ -1,7 +1,7 @@
 import { Body, Controller, Logger, Post } from '@nestjs/common'
 import { AuthService } from '../../domain/service/auth.service'
 import { CreateUserDto } from '../dtos/create-user.dto'
-import { TokenTypes } from '../types/token.types'
+import { CreateUserTypes } from '../types/create-user.types'
 
 @Controller('auth')
 export class AuthController {
@@ -10,7 +10,9 @@ export class AuthController {
 
   // Route to new user signup
   @Post('local/signup')
-  async signUpLocal(@Body() createUserDto: CreateUserDto): Promise<TokenTypes> {
+  async signUpLocal(
+    @Body() createUserDto: CreateUserDto,
+  ): Promise<CreateUserTypes> {
     return this.authService.signUpLocal(createUserDto)
   }
 
