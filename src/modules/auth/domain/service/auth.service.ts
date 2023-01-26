@@ -5,7 +5,7 @@ import {
   Logger,
 } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { IsNull, Not, Repository } from 'typeorm'
 import { CreateUserDto } from '../../application/dtos/create-user.dto'
 import { User } from '../entities'
 import * as bcrypt from 'bcrypt'
@@ -91,7 +91,17 @@ export class AuthService {
     }
   }
 
-  async logout() {
+  async logout(userId: number) {
+    const result = await this.userRepository.update(
+      {
+        id: userId,
+        refreshToken: Not(IsNull()),
+      },
+      {
+        refreshToken: null,
+      },
+    )
+
     return
   }
 
