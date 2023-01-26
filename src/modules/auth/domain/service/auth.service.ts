@@ -105,7 +105,32 @@ export class AuthService {
     return
   }
 
-  async refreshToken() {}
+  async refreshToken(userId: number, rt: string) {
+    // get user first by id
+    const user = await this.userRepository.findOneBy({ id: userId })
+
+    if (!user) throw new ForbiddenException('Access denied')
+
+    const isTOkenMatch = bcrypt.compare(user.refreshToken, rt)
+
+    if (!isTOkenMatch) throw new ForbiddenException('Access denied')
+
+    const tokens = await this.getToken(userId, user.email)
+    this.logger.log('Both At and Rt generation done')
+
+    await this.updateRtByUserId(user.id, tokens.refresh_token)
+    this.logger.log('Update refresh token in user table done')
+
+    return {
+      data: {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user?.lastName,
+        email: user.email,
+      },
+      tokens,
+    }
+  }
 
   // function to generate hash from a given string
   hashData(data: string): Promise<string> {

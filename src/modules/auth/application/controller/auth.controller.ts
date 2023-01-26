@@ -44,9 +44,11 @@ export class AuthController {
   }
 
   // Route to get access token from refresh token
+  @UseGuards(AuthGuard('jwt-refresh'))
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
-  async refreshToken() {
-    // return this.authService.signUpLocal()
+  async refreshToken(@Req() req: Request) {
+    const user = req.user
+    return this.authService.refreshToken(user['sub'], user['refreshToken'])
   }
 }
