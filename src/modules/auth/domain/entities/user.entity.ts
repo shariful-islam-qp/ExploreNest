@@ -15,6 +15,11 @@ export class User extends Base {
   @Column({ name: 'password', type: 'varchar' })
   password: string
 
-  @Column({ name: 'refresh_token', type: 'varchar' })
+  @Column({
+    name: 'refresh_token',
+    type: 'varchar',
+    nullable: true,
+    default: null,
+  })
   refreshToken: string
 }
