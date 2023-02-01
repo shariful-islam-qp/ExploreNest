@@ -2,12 +2,12 @@ import { DataSource, DataSourceOptions } from 'typeorm'
 
 export const dataSourceOptions: DataSourceOptions = {
   type: 'mysql',
-  host: 'localhost',
+  host: 'mysql',
   port: 3306,
-  username: 'root',
-  password: 'Password123!',
-  database: 'nest_practice',
-  synchronize: false,
+  username: 'user',
+  password: 'Password123',
+  database: 'testDB',
+  synchronize: true,
   logging: false,
   entities: ['dist/**/*.entity.js'],
   migrations: ['dist/migrations/*.js'],

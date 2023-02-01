@@ -7,6 +7,8 @@ const logger = new Logger('main.ts:bootstrap')
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
 
+  console.log('env', process.env.ENVIRONMENT)
+
   // add validation pipeline
   app.useGlobalPipes(new ValidationPipe())
 
