@@ -28,7 +28,10 @@ export class AuthService {
     const isUserExist = await this.userRepository.findOneBy({
       email: createUserDto.email,
     })
-    if (isUserExist) throw new BadRequestException('Email already exists')
+    if (isUserExist) {
+      this.logger.error(`Email ${createUserDto.email} already exists`)
+      throw new BadRequestException('Email already exists')
+    }
 
     // make hash of password
     const hash = await this.hashData(createUserDto.password)
