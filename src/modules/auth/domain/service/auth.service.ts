@@ -22,6 +22,13 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  async generateHash(password: string): Promise<string> {
+    const salt = await bcrypt.genSalt()
+    const hash = await bcrypt.hash(password, salt)
+    this.logger.log('Hash generation done')
+    return hash
+  }
+
   // service to signup new user
   async signUpLocal(createUserDto: CreateUserDto): Promise<UserInterface> {
     // check if the user is already exist or not
@@ -34,8 +41,7 @@ export class AuthService {
     }
 
     // make hash of password
-    const hash = await this.hashData(createUserDto.password)
-    this.logger.log('Hash created done')
+    const hash = await this.generateHash(createUserDto.password)
 
     // create new user instance
     const newUser = this.userRepository.create({
@@ -73,9 +79,9 @@ export class AuthService {
 
     if (!user) throw new ForbiddenException('Access denied')
 
-    const isPasswordMatch = bcrypt.compare(user.password, authDto.password)
+    const isMatch = await bcrypt.compare(authDto.password, user.password)
 
-    if (!isPasswordMatch) throw new ForbiddenException('Access denied')
+    if (!isMatch) throw new ForbiddenException('Access denied')
 
     const tokens = await this.getToken(user.id, user.email)
     this.logger.log('Both At and Rt generation done')
