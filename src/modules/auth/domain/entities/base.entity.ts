@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger'
 import {
   CreateDateColumn,
   DeleteDateColumn,
@@ -8,6 +9,7 @@ import {
 
 @Entity()
 export class Base {
+  // @ApiProperty({ type: 'integer' })
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number
 

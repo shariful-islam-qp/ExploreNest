@@ -5,6 +5,7 @@ import { WinstonModule } from 'nest-winston'
 import { createLogger } from 'winston'
 import * as winston from 'winston'
 import * as path from 'path'
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 
 const customFormat = winston.format.combine(
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
@@ -41,6 +42,15 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe())
 
   app.setGlobalPrefix('api')
+
+  const config = new DocumentBuilder()
+    .setTitle('Nest ex')
+    .setDescription('Nest explore API description')
+    .setVersion('1.0')
+    .addTag('nest')
+    .build()
+  const document = SwaggerModule.createDocument(app, config)
+  SwaggerModule.setup('api', app, document)
 
   await app.listen(3000)
 }

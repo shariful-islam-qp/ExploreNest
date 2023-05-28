@@ -14,7 +14,9 @@ import { Request } from 'express'
 import { AtAuthGuard, RtAuthGuard } from '../../domain/guards'
 import { Public, GetUserContext } from '../../domain/decorators'
 import { UserContext } from '../interfaces/user-context.interface'
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   // private logger = new Logger(AuthController.name)
@@ -24,6 +26,12 @@ export class AuthController {
   @Public()
   @Post('local/signup')
   @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'New user signup' })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'New user signup done',
+    type: Promise<UserInterface>,
+  })
   async signUpLocal(
     @Body() createUserDto: CreateUserDto,
   ): Promise<UserInterface> {
@@ -53,7 +61,6 @@ export class AuthController {
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
   async refreshToken(@GetUserContext() user: UserContext) {
-    console.log('user', user)
     return this.authService.refreshToken(+user['sub'], user['refreshToken'])
   }
 }
