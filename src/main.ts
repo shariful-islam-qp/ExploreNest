@@ -6,6 +6,7 @@ import { createLogger } from 'winston'
 import * as winston from 'winston'
 import * as path from 'path'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+import { NestExpressApplication } from '@nestjs/platform-express'
 
 const customFormat = winston.format.combine(
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
@@ -35,9 +36,20 @@ const instance = createLogger({
 })
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
+  // const app = await NestFactory.create(AppModule, {
+  //   logger: WinstonModule.createLogger({ instance }),
+  // })
+
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     logger: WinstonModule.createLogger({ instance }),
   })
+
+  // Load static engin
+  app.useStaticAssets(path.join(__dirname, '..', 'public'))
+  app.setBaseViewsDir(
+    path.join(__dirname, '../../src/modules/websocket/', 'client'),
+  )
+  app.setViewEngine('hbs')
 
   app.useGlobalPipes(
     new ValidationPipe({
