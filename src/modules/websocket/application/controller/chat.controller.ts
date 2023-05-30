@@ -6,5 +6,5 @@ export class ChatController {
   @Public()
   @Get()
   @Render('index')
-  chat() {}
+  chat() { }
 }
